@@ -1,0 +1,54 @@
+# docker-compose.yml
+
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    env_file:   # <-- ADDED THIS SECTION
+      - ./.env
+    command: gunicorn project_umbrella.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles  # <-- ADDED: Shared volume for static files
+      - media_volume:/app/media         # <-- ADDED: Shared volume for media files
+    expose:
+      - 8000  # <-- CHANGED: No longer exposes port to the host
+    depends_on:
+      - db
+    environment:
+      - PORT=8000
+      - ENVIRONMENT=development # <-- ADD THIS LINE
+      - DB_HOST=db
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    volumes:
+      - static_volume:/app/staticfiles  # <-- ADDED: Mounts the shared static volume
+      - media_volume:/app/media         # <-- ADDED: Mounts the shared media volume
+    ports:
+      - "8001:80"  # <-- CHANGED: Nginx now handles the public port
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_volume:  # <-- ADDED: Defines the shared static volume
+  media_volume:   # <-- ADDED: Defines the shared media volume

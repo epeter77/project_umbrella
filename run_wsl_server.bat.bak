@@ -1,0 +1,18 @@
+@echo off
+TITLE PROJECT_UMBRELLA WSL Launcher
+
+REM This Windows Batch script launches the corresponding .sh script inside WSL.
+REM This allows for a "double-click" start from Windows File Explorer.
+
+echo --- Launching WSL to start the Django Server ---
+echo.
+echo A new terminal window will open to run the server.
+echo You can close that new window to stop the server.
+echo.
+
+REM The 'wsl.exe' command executes a command inside the default Linux distribution.
+REM By default, it starts in the directory where the command is run from.
+REM We execute the bash script to handle the rest of the startup process.
+wsl.exe ./start_server.sh
+
+pause

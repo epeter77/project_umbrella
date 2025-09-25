@@ -1,0 +1,21 @@
+Ignore files and directories that should not be included in the Docker image.
+Python virtual environment
+venv/
+
+Python bytecode files
+pycache/
+*.pyc
+*.pyo
+*.pyd
+
+Local database files
+*.sqlite3
+db.sqlite3
+
+OS-specific files
+.DS_Store
+Thumbs.db
+
+Docker files
+Dockerfile
+.dockerignore

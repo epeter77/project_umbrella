@@ -1,0 +1,4 @@
+{% load i18n %}
+<a href="{% url 'admin:index' %}" class="brand-link {{ jazzmin_settings.brand_classes | default:''}}">
+    <span class="brand-text font-weight-light">{{ dashboard_title|default:'Project Umbrella' }}</span>
+</a>

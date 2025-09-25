@@ -1,0 +1,9 @@
+{% extends "jazzmin/base_site.html" %}
+{% load static %}
+
+{% block extra_css %}
+    {{ block.super }}
+    {% if request.tenant_custom_css %}
+        <link rel="stylesheet" type="text/css" href="{% static request.tenant_custom_css %}">
+    {% endif %}
+{% endblock %}
